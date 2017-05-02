@@ -7,6 +7,7 @@ var IndexRoute = ReactRouter.IndexRoute;
 var hashHistory = ReactRouter.hashHistory;
 
 var Home = require('../components/Home');
+// var JSONConverter = require('../components/JSONConverter');
 
 var routes = (
     <Router history={hashHistory}>

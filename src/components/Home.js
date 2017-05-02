@@ -4,9 +4,12 @@ var Link = ReactRouter.Link;
 var ReactDOM = require('react-dom')
 var npl_boundary = require('../data/npl_boundary');
 var L = require('leaflet');
-var JMOutput = require('../data/JM_Output_v2')
+// var GeojsonMinifier = require('geojson-minifier');
+// console.log(geos)
+var JMOutput = require('../data/JM_Subset')
+// var JMOutputMin = require('../data/jm_output_min')
 require('leaflet-boundary-canvas')
-
+require('leaflet.vectorgrid')
 require('../css/mapStyles.css')
 
 
@@ -26,6 +29,13 @@ var Home = React.createClass({
     },
 
     _loadMap : function () {
+        // var JMOutput = JMOutputMin
+        // var JMOutput=JSON.parse(minifier.unpack(JMOutputMin))
+        
+        // console.log("min",(JMOutput))
+        // var JMOutput = JSON.parse(minifier.unpack(JMOutputMin));
+
+        // console.log((JMOutput))
         var map = this.map = L.map(ReactDOM.findDOMNode(this), {scrollWheelZoom: false,attributionControl: false}).setView([28.207, 83.992], 8);
         
         L.control.attribution({position: 'bottomright', prefix:false}).addTo(map);
@@ -38,6 +48,8 @@ var Home = React.createClass({
             attribution: 'Developed by <a target = "_blank" href="http://kathmandulivinglabs.org">Kathmandu Living Labs</a> <br>  <a href = "http://leafletjs.com" >Leaflet</a> | &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors '
         }).addTo(map)
 
+
+
         var getColor = function(fClass) {
             if (fClass == 1) {
                 return '#009892'
@@ -48,29 +60,42 @@ var Home = React.createClass({
             }
         }
 
+
         var getLegendColor = function(fClass) {
             if (fClass == 1) {
                 return 'rgba(0,152,146,0.8)'
             } else if (fClass == 2) {
                 return '#83dbd8'
             } else {
-                return 'rgba(0,0,0,0.2)'
+                return 'rgba(100,100,100,0.2)'
             }
         }
 
 
         var getOpacity = function(fClass) {
+            // console.log(fClass)
             if (fClass == 1) {
-                return 0.8
+                return 1
             } else if (fClass == 2) {
-                return 0.5
+                return 1
             } else {
-                return 0.4
+                return 1
             }
         }
 
 
+        var getLowProbStyle = function(feature) {
+            return {
+                fillColor: "#fff",
+                weight: 0,
+                opacity: 0,
+                color: '#888',
+                dashArray: '0',
+                fillOpacity: 0.5
+            };
+        }
 
+        // var LoProbLayer = L.geoJSON(npl_boundary, {style:getLowProbStyle}).addTo(map);
         var getStyle = function(feature) {
             return {
                 fillColor: getColor(feature.properties.fClass),
@@ -104,7 +129,54 @@ var Home = React.createClass({
         legend.addTo(map);
 
 
-        var JMOutputLayer = L.geoJSON(JMOutput, {style:getStyle}).addTo(map);
+        var vectorGridBg = L.vectorGrid.slicer( npl_boundary, {
+            rendererFactory: L.svg.tile,
+            vectorTileLayerStyles: {
+
+                sliced: function(properties, zoom) {
+                    var p = properties.fClass
+                    return {
+                        fillColor: '#555',
+                        fillOpacity: 0.3,
+    //                  fillOpacity: 1,
+                        stroke: true,
+                        fill: true,
+                        color: 'black',
+//                          opacity: 0.2,
+                        weight: 0,
+                    }
+                }
+            },
+            interactive: true,
+            getFeatureId: function(f) {
+                // return f.properties.wb_a3;
+            }
+        }).addTo(map)
+
+        var vectorGrid = L.vectorGrid.slicer( JMOutput, {
+            rendererFactory: L.svg.tile,
+            vectorTileLayerStyles: {
+
+                sliced: function(properties, zoom) {
+                    var p = properties.fClass
+                    return {
+                        fillColor: getColor(p),
+                        fillOpacity: getOpacity(p),
+    //                  fillOpacity: 1,
+                        stroke: true,
+                        fill: true,
+                        color: 'black',
+//                          opacity: 0.2,
+                        weight: 0,
+                    }
+                }
+            },
+            interactive: true,
+            getFeatureId: function(f) {
+                // return f.properties.wb_a3;
+            }
+        }).addTo(map)
+
     },
     componentDidMount: function() {
         // console.log("Topo",topojson)

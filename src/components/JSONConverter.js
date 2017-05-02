@@ -24,20 +24,14 @@ var Home = React.createClass({
             //         attribution: 'Developed by <a target = "_blank" href="http://kathmandulivinglabs.org">Kathmandu Living Labs</a> <br>  <a href = "http://leafletjs.com" >Leaflet</a> | &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors '
             // }).addTo(map);
             // console.log(JMOutput)
-            JMOutput.features.map(function(item, i){
-                if (item.properties.Class1 == 1) {
-                    item.properties.fClass=1
-                } else if (item.properties.Class2 == 2) {
-                    item.properties.fClass=2
-                } else {
-                    item.properties.fClass=3
-                }
-                delete item.properties.Class1
-                delete item.properties.Class2
-                delete item.properties.Class3
-                console.log(item.properties)
+            var filteredOut = JMOutput.features.filter(function(item, i) {
+                // console.log(item.properties)
+                // console.log((item.properties.fClass > 1 || item.properties.Class2 == 2))
+                return (item.properties.fClass < 3)
             })
 
+            JMOutput.features = filteredOut
+            // console.log(filteredOut)
 
             this.JMOutput = JMOutput
             var data = JSON.stringify(JMOutput);
