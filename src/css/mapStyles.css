@@ -1,0 +1,54 @@
+.leaflet-container {
+    background: #555555;
+}
+
+.info{
+    background-color: rgba(50,50,50,0.8);
+    padding:10px;
+    z-index: 1000000;
+    font-family: 'Open Sans', serif;
+    font-size:12px;
+    color:#009892;
+    max-width:150px;
+    /*margin-left: -100px;*/
+}
+
+
+.legend-header{
+    /*text-transform: uppercase;*/
+    font-family: 'Open Sans', serif;
+    font-size:12px;
+    font-weight:bold;
+    /*padding-bottom:5px;*/
+
+} 
+
+.legend-icon {
+    padding-right:10px;
+    font-size: 20px;
+}
+
+.legend-label {
+    /*vertical-align: text-top;*/
+    position:absolute; 
+    top:50%; 
+    height:10em; 
+    margin-top:-10px;
+    /*padding-top:3px;*/
+}
+
+.legend-parent {
+    position:relative;
+}
+
+.legend-description{
+    text-transform: uppercase;
+    font-size:12px;
+    font-family: 'Open Sans', serif;
+    margin-top:-2px;
+    line-height: 1em;
+    font-weight:bold;
+    padding-bottom:5px;
+    /*font-style:italic;*/
+
+} 
