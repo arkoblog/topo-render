@@ -62,9 +62,9 @@ var Home = React.createClass({
         var getOpacity = function(fClass) {
             // console.log(fClass)
             if (fClass == 1) {
-                return 1
+                return 0.8
             } else if (fClass == 2) {
-                return 1
+                return 0.8
             } else {
                 return 1
             }
