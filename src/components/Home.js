@@ -4,10 +4,8 @@ var Link = ReactRouter.Link;
 var ReactDOM = require('react-dom')
 var npl_boundary = require('../data/npl_boundary');
 var L = require('leaflet');
-// var GeojsonMinifier = require('geojson-minifier');
-// console.log(geos)
-var JMOutput = require('../data/JM_Subset')
-// var JMOutputMin = require('../data/jm_output_min')
+// var JMOutput = require('../data/JM_Subset')
+var JMOutput2 = require('../data/JM_Output_Mouse')
 require('leaflet-boundary-canvas')
 require('leaflet.vectorgrid')
 require('../css/mapStyles.css')
@@ -19,23 +17,12 @@ var esri_topo = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_
 // Load Components
 
 
-
-// var MyMap = require('./Maps')
-
-
 var Home = React.createClass({
     getInitialState: function() {
         return {}
     },
 
     _loadMap : function () {
-        // var JMOutput = JMOutputMin
-        // var JMOutput=JSON.parse(minifier.unpack(JMOutputMin))
-        
-        // console.log("min",(JMOutput))
-        // var JMOutput = JSON.parse(minifier.unpack(JMOutputMin));
-
-        // console.log((JMOutput))
         var map = this.map = L.map(ReactDOM.findDOMNode(this), {scrollWheelZoom: false,attributionControl: false}).setView([28.207, 83.992], 8);
         
         L.control.attribution({position: 'bottomright', prefix:false}).addTo(map);
@@ -52,9 +39,9 @@ var Home = React.createClass({
 
         var getColor = function(fClass) {
             if (fClass == 1) {
-                return '#009892'
+                return '#ff3f00'
             } else if (fClass == 2) {
-                return '#1dc0ba'
+                return '#ffb400'
             } else {
                 return '#000000'
             }
@@ -63,9 +50,9 @@ var Home = React.createClass({
 
         var getLegendColor = function(fClass) {
             if (fClass == 1) {
-                return 'rgba(0,152,146,0.8)'
+                return 'rgba(255, 63, 0,0.8)'
             } else if (fClass == 2) {
-                return '#83dbd8'
+                return '#ffb400'
             } else {
                 return 'rgba(100,100,100,0.2)'
             }
@@ -83,29 +70,6 @@ var Home = React.createClass({
             }
         }
 
-
-        var getLowProbStyle = function(feature) {
-            return {
-                fillColor: "#fff",
-                weight: 0,
-                opacity: 0,
-                color: '#888',
-                dashArray: '0',
-                fillOpacity: 0.5
-            };
-        }
-
-        // var LoProbLayer = L.geoJSON(npl_boundary, {style:getLowProbStyle}).addTo(map);
-        var getStyle = function(feature) {
-            return {
-                fillColor: getColor(feature.properties.fClass),
-                weight: 0,
-                opacity: 0,
-                color: '#888',
-                dashArray: '0',
-                fillOpacity: getOpacity(feature.properties.fClass)
-            };
-        }
 
         var legend = L.control({position: 'bottomleft'});
 
@@ -134,15 +98,12 @@ var Home = React.createClass({
             vectorTileLayerStyles: {
 
                 sliced: function(properties, zoom) {
-                    var p = properties.fClass
                     return {
-                        fillColor: '#555',
-                        fillOpacity: 0.3,
-    //                  fillOpacity: 1,
+                        fillColor: '#888',
+                        fillOpacity: 0.2,
                         stroke: true,
                         fill: true,
                         color: 'black',
-//                          opacity: 0.2,
                         weight: 0,
                     }
                 }
@@ -153,20 +114,18 @@ var Home = React.createClass({
             }
         }).addTo(map)
 
-        var vectorGrid = L.vectorGrid.slicer( JMOutput, {
+        var vectorGrid = L.vectorGrid.slicer( JMOutput2, {
             rendererFactory: L.svg.tile,
             vectorTileLayerStyles: {
 
                 sliced: function(properties, zoom) {
-                    var p = properties.fClass
+                    var p = properties.Class
                     return {
                         fillColor: getColor(p),
                         fillOpacity: getOpacity(p),
-    //                  fillOpacity: 1,
                         stroke: true,
                         fill: true,
                         color: 'black',
-//                          opacity: 0.2,
                         weight: 0,
                     }
                 }
@@ -179,7 +138,6 @@ var Home = React.createClass({
 
     },
     componentDidMount: function() {
-        // console.log("Topo",topojson)
         this._loadMap();
     },
     render: function() {
