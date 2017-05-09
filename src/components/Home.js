@@ -5,7 +5,7 @@ var ReactDOM = require('react-dom')
 var npl_boundary = require('../data/npl_boundary');
 var L = require('leaflet');
 // var JMOutput = require('../data/JM_Subset')
-var JMOutput2 = require('../data/JM_Output_Mouse_262050')
+var JMOutput2 = require('../data/JM_Output_Mouse_852050')
 
 
 require('leaflet-boundary-canvas')
