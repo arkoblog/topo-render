@@ -5,7 +5,9 @@ var ReactDOM = require('react-dom')
 var npl_boundary = require('../data/npl_boundary');
 var L = require('leaflet');
 // var JMOutput = require('../data/JM_Subset')
-var JMOutput2 = require('../data/JM_Output_Mouse')
+var JMOutput2 = require('../data/JM_Output_Mouse_262050')
+
+
 require('leaflet-boundary-canvas')
 require('leaflet.vectorgrid')
 require('../css/mapStyles.css')
@@ -119,7 +121,8 @@ var Home = React.createClass({
             vectorTileLayerStyles: {
 
                 sliced: function(properties, zoom) {
-                    var p = properties.Class
+                    // console.log(Object.keys(properties))
+                    var p = properties[Object.keys(properties)[0]]
                     return {
                         fillColor: getColor(p),
                         fillOpacity: getOpacity(p),
